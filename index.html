@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CTM Actas Inteligentes | Versión 0.6</title>
+<style>
+:root{
+ --navy:#183477; --blue:#2f69a8; --blue-light:#eaf1fa;
+ --carmine:#963b68; --carmine-dark:#76264e; --ink:#202b3c;
+ --muted:#68758a; --line:#dbe2ec; --paper:#fff; --bg:#f3f5f9;
+ --green:#2f665b; --shadow:0 12px 34px rgba(24,52,119,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.topbar{background:linear-gradient(112deg,var(--navy),#244d89 65%,var(--carmine-dark));color:#fff;padding:23px max(22px,calc((100% - 1120px)/2));}
+.brand{display:flex;align-items:center;gap:15px}
+.crest{width:56px;height:56px;border:1px solid rgba(255,255,255,.5);border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.1);font-size:27px}
+.brand h1{margin:0;font-size:clamp(20px,3vw,28px);letter-spacing:.2px}
+.brand p{margin:3px 0 0;color:#e4eafa;font-size:13px}
+.top-meta{margin-top:17px;display:flex;gap:9px;flex-wrap:wrap}
+.pill{border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:5px 10px;font-size:12px;color:#f3f6ff}
+main{max-width:1120px;margin:28px auto;padding:0 18px 40px}
+.intro{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:20px}
+.intro h2{margin:0;color:var(--navy);font-size:23px}
+.intro p{margin:5px 0;color:var(--muted);max-width:720px}
+.status{white-space:nowrap;background:#fff;border:1px solid var(--line);padding:8px 12px;border-radius:10px;color:var(--green);font-size:12px;font-weight:700}
+.grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(280px,.8fr);gap:20px;align-items:start}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:18px}
+.card-head{padding:17px 21px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.step{width:30px;height:30px;display:grid;place-items:center;border-radius:9px;background:var(--blue-light);color:var(--navy);font-weight:800}
+.card-head h3{margin:0;font-size:16px;color:var(--navy)}
+.card-body{padding:21px}
+label{display:block;font-weight:650;font-size:13px;color:#34435a;margin-bottom:6px}
+input,select,textarea{font:inherit;width:100%;padding:11px 12px;border:1px solid #cbd5e3;border-radius:9px;background:#fff;color:var(--ink);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(47,105,168,.12)}
+textarea{min-height:92px;resize:vertical}
+.audio-panel{border:1px solid var(--line);background:#f8faff;border-radius:12px;padding:15px;margin:0 0 18px}
+.audio-panel h4{margin:0 0 6px;color:var(--navy);font-size:16px}
+.audio-panel p{margin:0 0 12px;color:var(--muted);font-size:13px}
+.audio-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.audio-actions button{border:0;border-radius:8px;padding:10px 13px;font:inherit;font-weight:650;cursor:pointer}
+.audio-actions button:disabled{opacity:.45;cursor:not-allowed}
+.audio-primary{background:var(--navy);color:white}.audio-secondary{background:#e6edf8;color:var(--navy)}
+.audio-status{font-size:13px;color:var(--green);min-height:22px;margin:8px 0}
+#audioPlayback{width:100%;margin-top:8px}
+.field{margin-bottom:16px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.hint{font-size:12px;color:var(--muted);margin-top:5px}
+.role-box{padding:15px;background:#f8f9fc;border:1px solid var(--line);border-radius:12px;margin-top:5px}
+.role-box .field:last-child{margin-bottom:0}
+.notice{padding:13px 14px;border-radius:10px;background:#f8f4f7;border-left:4px solid var(--carmine);font-size:13px;color:#553448}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+button{border:0;border-radius:9px;padding:11px 15px;font:700 13px inherit;cursor:pointer}
+.primary{background:var(--navy);color:white}
+.secondary{background:#edf1f7;color:var(--navy);border:1px solid #d4deeb}
+.accent{background:var(--carmine);color:white}
+button:hover{filter:brightness(.96)}
+.preview{background:#fff;border:1px solid var(--line);border-radius:12px;padding:20px;min-height:300px}
+.preview .doc-title{text-align:center;border-bottom:2px solid var(--navy);padding-bottom:13px;margin-bottom:16px}
+.doc-title strong{display:block;color:var(--navy);font-size:17px}
+.doc-title span{font-size:12px;color:var(--muted)}
+.preview h4{margin:16px 0 5px;font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--carmine-dark)}
+.preview p{margin:0 0 8px;white-space:pre-wrap;font-size:13px}
+.signatures{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:45px}
+.sign{border-top:1px solid #5e6878;padding-top:7px;font-size:12px;text-align:center}
+.smallprint{font-size:11px;color:var(--muted);margin-top:16px}
+footer{max-width:1120px;margin:0 auto;padding:0 18px 25px;color:#7a8495;font-size:12px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}.intro{display:block}.status{display:inline-block;margin-top:10px}.row{grid-template-columns:1fr}.topbar{padding:20px}}
+@media print{body{background:white}.topbar,.intro,.form-card,.no-print,footer{display:none!important}main{margin:0;padding:0;max-width:none}.grid{display:block}.preview{border:0;box-shadow:none;padding:0}.card{border:0;box-shadow:none}.card-head{display:none}.card-body{padding:0}}
+</style>
+</head>
+<body>
+<header class="topbar">
+ <div class="brand">
+  <div class="crest" aria-label="Escudo institucional de referencia">✦</div>
+  <div><h1>CTM Actas Inteligentes</h1><p>Colegio Taller de María · Gestión documental institucional</p></div>
+ </div>
+ <div class="top-meta"><span class="pill">Prototipo de interfaz</span><span class="pill">Azul institucional · Carmín · Blanco</span><span class="pill">Borradores sujetos a revisión</span></div>
+</header>
+<main>
+ <div class="intro">
+  <div><h2>Registro y elaboración de actas</h2><p>Registra los datos de la reunión, graba audio desde el navegador y permite transcribir voz en vivo en equipos compatibles. La transcripción debe revisarse antes de incorporarla al acta.</p></div>
+  <div class="status">● Datos en este navegador</div>
+ </div>
+ <div class="grid">
+  <section>
+   <div class="card form-card">
+    <div class="card-head"><span class="step">1</span><h3>Datos generales de la reunión</h3></div>
+    <div class="card-body">
+     <div class="row">
+      <div class="field"><label for="consecutivo">Consecutivo del acta</label><input id="consecutivo" placeholder="Ej. CTM-2026-001"></div>
+      <div class="field"><label for="tipo">Tipo de reunión</label><select id="tipo"><option>Reunión académica</option><option>Convivencia escolar</option><option>Reunión con familias</option><option>Reunión de docentes</option><option>Reunión directiva</option><option>Otra reunión institucional</option></select></div>
+     </div>
+     <div class="row">
+      <div class="field"><label for="fecha">Fecha</label><input id="fecha" type="date"></div>
+      <div class="field"><label for="hora">Hora</label><input id="hora" type="time"></div>
+     </div>
+     <div class="field"><label for="lugar">Lugar</label><input id="lugar" placeholder="Ej. Sala de reuniones / oficina de coordinación"></div>
+     <div class="field"><label for="responsable">Responsable de la reunión / caso</label><input id="responsable" placeholder="Escriba el nombre completo del responsable"><div class="hint">Campo de texto libre; no limita el nombre a una lista de cargos.</div></div>
+     <div class="role-box">
+      <div class="field"><label for="elaborador">Cargo de quien elabora el acta</label><select id="elaborador"><option value="">Seleccione el cargo</option><option>Director(a)</option><option>Coordinador(a) académico(a)</option><option>Coordinador(a) de convivencia</option></select><div class="hint">Este campo es independiente del nombre del responsable.</div></div>
+      <div class="field"><label for="nombreElaborador">Nombre de quien elabora el acta</label><input id="nombreElaborador" placeholder="Nombre completo"></div>
+     </div>
+     <div class="field" style="margin-top:16px"><label for="asistentes">Asistentes</label><textarea id="asistentes" placeholder="Nombre completo y cargo o relación con la reunión; una persona por línea"></textarea></div>
+     <div class="field"><label for="objetivo">Objetivo / tema de la reunión</label><textarea id="objetivo" placeholder="Indique el propósito de la reunión"></textarea></div>
+    </div>
+   </div>
+   <div class="card form-card">
+    <div class="card-head"><span class="step">2</span><h3>Desarrollo y acuerdos</h3></div>
+    <div class="card-body">
+     <div class="audio-panel no-print">
+      <h4>🎙️ Grabación y transcripción de audio</h4>
+      <p>Permite el acceso al micrófono cuando el navegador lo solicite. Puedes grabar un archivo de audio o transcribir en vivo y pasar el texto al campo «Desarrollo de la reunión».</p>
+      <div class="audio-actions">
+       <button type="button" id="recordBtn" class="audio-primary" onclick="startRecording()">● Grabar audio</button>
+       <button type="button" id="stopRecordBtn" class="audio-secondary" onclick="stopRecording()" disabled>■ Detener grabación</button>
+       <button type="button" id="transcribeBtn" class="audio-primary" onclick="startTranscription()">Iniciar transcripción en vivo</button>
+       <button type="button" id="stopTranscribeBtn" class="audio-secondary" onclick="stopTranscription()" disabled>Detener transcripción</button>
+      </div>
+      <div id="audioStatus" class="audio-status" role="status" aria-live="polite">Listo. Selecciona una opción para comenzar.</div>
+      <audio id="audioPlayback" controls hidden></audio>
+      <div class="audio-actions"><a id="downloadAudio" class="button secondary" hidden download="Grabacion_CTM.webm" style="text-decoration:none;padding:10px 13px;border-radius:8px;background:#e6edf8;color:#183477;font-weight:650">Descargar grabación</a><button type="button" id="insertTranscriptBtn" class="audio-secondary" onclick="insertTranscript()" disabled>Pasar transcripción al desarrollo</button><button type="button" class="audio-secondary" onclick="clearTranscript()">Limpiar transcripción</button></div>
+      <label for="transcriptText">Texto transcrito (revisar y corregir)</label>
+      <textarea id="transcriptText" placeholder="La transcripción reconocida aparecerá aquí. También puedes corregirla antes de pasarla al acta."></textarea>
+      <p style="margin-top:8px">Nota: la transcripción en vivo depende de que el navegador admita reconocimiento de voz y tenga conexión. La grabación se procesa localmente en esta página. No se transcribe automáticamente un archivo de audio preexistente.</p>
+     </div>
+     <div class="field"><label for="desarrollo">Desarrollo de la reunión</label><textarea id="desarrollo" placeholder="Registre los temas tratados de manera objetiva y ordenada"></textarea></div>
+     <div class="field"><label for="decisiones">Decisiones y acuerdos</label><textarea id="decisiones" placeholder="Registre acuerdos, decisiones y asuntos pendientes"></textarea></div>
+     <div class="field"><label for="compromisos">Compromisos, responsables y fechas</label><textarea id="compromisos" placeholder="Ej. Acción — responsable — fecha de cumplimiento"></textarea></div>
+     <div class="notice">En reuniones de convivencia, las referencias al Manual deben verificarse y aprobarse por el equipo competente. La herramienta no determina culpabilidad ni reemplaza el debido proceso.</div>
+     <div class="actions no-print"><button class="primary" onclick="generate()">Actualizar vista previa</button><button class="secondary" onclick="window.print()">Imprimir / Guardar en PDF</button><button class="secondary" onclick="downloadTxt()">Descargar borrador (.txt)</button><button class="accent" onclick="resetForm()">Limpiar formulario</button></div>
+    </div>
+   </div>
+  </section>
+  <section class="card">
+   <div class="card-head"><span class="step">3</span><h3>Vista previa del acta</h3></div>
+   <div class="card-body">
+    <article class="preview" id="preview">
+     <div class="doc-title"><strong>COLEGIO TALLER DE MARÍA</strong><span>ACTA DE REUNIÓN INSTITUCIONAL</span></div>
+     <p>Complete los campos y pulse «Actualizar vista previa».</p>
+    </article>
+    <p class="smallprint">Documento preliminar. Verifique nombres, fechas, acuerdos y referencias antes de aprobar, imprimir o firmar.</p>
+   </div>
+  </section>
+ </div>
+</main>
+<footer>CTM Actas Inteligentes · Versión 0.7 · Prototipo demostrativo local. Las grabaciones y transcripciones pueden contener información confidencial: úsalas únicamente con autorización, consérvalas de forma segura y verifica el texto antes de incorporarlo al acta.</footer>
+<script>
+const ids=['consecutivo','tipo','fecha','hora','lugar','responsable','elaborador','nombreElaborador','asistentes','objetivo','desarrollo','decisiones','compromisos'];
+let mediaRecorder=null, recordedChunks=[], recordedStream=null, recognition=null, finalTranscript='', stopFallbackTimer=null, recognitionActive=false;
+function setAudioStatus(message){document.getElementById('audioStatus').textContent=message}
+async function startRecording(){
+ if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder){setAudioStatus('Este navegador no permite grabar audio desde esta página. Prueba con una versión actualizada de Chrome.');return}
+ try{
+  recordedStream=await navigator.mediaDevices.getUserMedia({audio:true}); recordedChunks=[];
+  let options={}; if(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) options.mimeType='audio/webm;codecs=opus';
+  mediaRecorder=new MediaRecorder(recordedStream,options);
+  mediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size)recordedChunks.push(e.data)};
+  mediaRecorder.onstop=()=>{const blob=new Blob(recordedChunks,{type:mediaRecorder.mimeType||'audio/webm'});const url=URL.createObjectURL(blob);const player=document.getElementById('audioPlayback');player.src=url;player.hidden=false;const link=document.getElementById('downloadAudio');link.href=url;link.download='Grabacion_CTM.'+(blob.type.includes('mp4')?'mp4':'webm');link.hidden=false;setAudioStatus('Grabación finalizada. Puedes escucharla o descargar el archivo.');if(recordedStream){recordedStream.getTracks().forEach(t=>t.stop());recordedStream=null}};
+  mediaRecorder.start();document.getElementById('recordBtn').disabled=true;document.getElementById('stopRecordBtn').disabled=false;setAudioStatus('Grabando audio… Pulsa «Detener grabación» cuando termines.');
+ }catch(e){setAudioStatus('No se pudo acceder al micrófono. Revisa los permisos del navegador e inténtalo de nuevo.')}
+}
+function stopRecording(){if(mediaRecorder&&mediaRecorder.state!=='inactive'){mediaRecorder.stop();document.getElementById('recordBtn').disabled=false;document.getElementById('stopRecordBtn').disabled=true}}
+function startTranscription(){
+ const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(!SR){setAudioStatus('Este navegador no ofrece reconocimiento de voz en vivo. Abre el archivo en Google Chrome actualizado en un computador. Para conservar el audio, pulsa «Grabar audio» por separado.');return}
+ if(!window.isSecureContext && location.protocol!=='file:') {setAudioStatus('El navegador bloquea el micrófono porque la página no se considera segura. Abre el archivo localmente o desde una dirección HTTPS.');return}
+ try{
+  if(recognitionActive){setAudioStatus('La transcripción ya está activa.');return}
+  recognition=new SR();recognition.lang='es-CO';recognition.continuous=true;recognition.interimResults=true;finalTranscript='';
+  const box=document.getElementById('transcriptText');
+  box.value='';document.getElementById('insertTranscriptBtn').disabled=true;
+  recognition.onstart=()=>{recognitionActive=true;document.getElementById('transcribeBtn').disabled=true;document.getElementById('stopTranscribeBtn').disabled=false;setAudioStatus('Micrófono activo: escuchando y transcribiendo en español. Esta opción no guarda un archivo de audio; para guardarlo, inicia también «Grabar audio».')};
+  recognition.onresult=e=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){const spoken=e.results[i][0].transcript;if(e.results[i].isFinal)finalTranscript+=spoken.trim()+' ';else interim+=spoken}box.value=(finalTranscript+interim).trim();document.getElementById('insertTranscriptBtn').disabled=!box.value.trim()};
+  recognition.onerror=e=>{const messages={ 'not-allowed':'El navegador denegó el permiso del micrófono. Revisa los permisos del sitio en Chrome.', 'service-not-allowed':'El servicio de reconocimiento de voz está bloqueado por el navegador.', 'audio-capture':'No se detecta un micrófono disponible.', 'network':'El reconocimiento de voz necesita conexión a internet; revisa la conexión.', 'no-speech':'No se detectó voz. Puedes volver a intentarlo hablando cerca del micrófono.'};setAudioStatus('Error de transcripción: '+(messages[e.error]||e.error||'no identificado'));};
+  recognition.onend=()=>{recognitionActive=false;if(stopFallbackTimer){clearTimeout(stopFallbackTimer);stopFallbackTimer=null}document.getElementById('transcribeBtn').disabled=false;document.getElementById('stopTranscribeBtn').disabled=true;document.getElementById('insertTranscriptBtn').disabled=!box.value.trim();if(box.value.trim())setAudioStatus('Transcripción finalizada. Revisa el texto. Si también necesitas conservar el audio, usa «Grabar audio».');else if(document.getElementById('audioStatus').textContent.includes('Deteniendo'))setAudioStatus('Transcripción detenida, pero no se recibió texto. Comprueba el permiso del micrófono y la conexión a internet.');};
+  setAudioStatus('Solicitando acceso al micrófono y preparando la transcripción…');
+  recognition.start();
+  // Salvaguarda para navegadores que no disparan onend después de stop().
+  window.clearTimeout(stopFallbackTimer);
+ }catch(e){recognitionActive=false;document.getElementById('transcribeBtn').disabled=false;document.getElementById('stopTranscribeBtn').disabled=true;setAudioStatus('No se pudo iniciar la transcripción ('+(e.name||'error')+'). Revisa los permisos del micrófono y prueba Chrome actualizado.');}
+}
+function stopTranscription(){
+ if(!recognition){setAudioStatus('No hay una transcripción activa.');return}
+ setAudioStatus('Solicitando detener la transcripción…');
+ try{recognition.stop()}catch(e){try{recognition.abort()}catch(_){}}
+ window.clearTimeout(stopFallbackTimer);
+ stopFallbackTimer=window.setTimeout(()=>{if(recognitionActive){try{recognition.abort()}catch(e){}recognitionActive=false;document.getElementById('transcribeBtn').disabled=false;document.getElementById('stopTranscribeBtn').disabled=true;document.getElementById('insertTranscriptBtn').disabled=!document.getElementById('transcriptText').value.trim();setAudioStatus('El navegador no respondió al detener la transcripción. Se liberó el control para que puedas volver a intentarlo. No se guardó audio desde la opción de transcripción.')}},2500);
+}
+function insertTranscript(){const t=document.getElementById('transcriptText').value.trim();if(!t)return;const d=document.getElementById('desarrollo');d.value=d.value.trim()?(d.value.trim()+'\n\n'+t):t;d.focus();setAudioStatus('Transcripción agregada al desarrollo de la reunión. Revisa el contenido y actualiza la vista previa.')}
+function clearTranscript(){document.getElementById('transcriptText').value='';finalTranscript='';document.getElementById('insertTranscriptBtn').disabled=true;setAudioStatus('Texto de transcripción limpiado. La grabación de audio no se ha eliminado.')}
+document.getElementById('fecha').value=new Date().toISOString().slice(0,10);
+function val(id){return document.getElementById(id).value.trim()}
+function esc(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function section(title,value){return `<h4>${title}</h4><p>${esc(value||'Pendiente de diligenciar')}</p>`}
+function generate(){
+ const p=document.getElementById('preview');
+ p.innerHTML=`<div class="doc-title"><strong>COLEGIO TALLER DE MARÍA</strong><span>ACTA DE REUNIÓN INSTITUCIONAL</span></div>
+ <p><b>Consecutivo:</b> ${esc(val('consecutivo')||'Pendiente')} &nbsp; <b>Tipo:</b> ${esc(val('tipo'))}</p>
+ <p><b>Fecha:</b> ${esc(val('fecha')||'Pendiente')} &nbsp; <b>Hora:</b> ${esc(val('hora')||'Pendiente')}</p>
+ <p><b>Lugar:</b> ${esc(val('lugar')||'Pendiente')}</p>
+ <p><b>Responsable de la reunión / caso:</b> ${esc(val('responsable')||'Pendiente')}</p>
+ <p><b>Elabora:</b> ${esc(val('nombreElaborador')||'Pendiente')} — ${esc(val('elaborador')||'Cargo sin seleccionar')}</p>
+ ${section('Asistentes',val('asistentes'))}${section('Objetivo / tema',val('objetivo'))}${section('Desarrollo',val('desarrollo'))}${section('Decisiones y acuerdos',val('decisiones'))}${section('Compromisos, responsables y fechas',val('compromisos'))}
+ <div class="signatures"><div class="sign">Nombre, cargo y firma del asistente</div><div class="sign">Nombre, cargo y firma del asistente</div><div class="sign">Nombre, cargo y firma de quien elabora</div><div class="sign">Nombre, cargo y firma de quien preside (si aplica)</div></div>
+ <p class="smallprint">Borrador para revisión institucional. Las firmas y la aprobación deben completarse por las personas correspondientes.</p>`;
+}
+function downloadTxt(){
+ const lines=['COLEGIO TALLER DE MARÍA','ACTA DE REUNIÓN INSTITUCIONAL','',...ids.map(id=>{let labels={consecutivo:'Consecutivo',tipo:'Tipo de reunión',fecha:'Fecha',hora:'Hora',lugar:'Lugar',responsable:'Responsable de la reunión / caso',elaborador:'Cargo de quien elabora',nombreElaborador:'Nombre de quien elabora',asistentes:'Asistentes',objetivo:'Objetivo / tema',desarrollo:'Desarrollo',decisiones:'Decisiones y acuerdos',compromisos:'Compromisos, responsables y fechas'};return labels[id]+': '+(val(id)||'Pendiente de diligenciar')})].join('\n\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([lines],{type:'text/plain;charset=utf-8'}));a.download='Borrador_acta_CTM.txt';a.click();URL.revokeObjectURL(a.href);
+}
+function resetForm(){if(confirm('¿Desea limpiar todos los campos?')){ids.forEach(id=>{if(id==='tipo')document.getElementById(id).selectedIndex=0;else document.getElementById(id).value=''});document.getElementById('fecha').value=new Date().toISOString().slice(0,10);document.getElementById('preview').innerHTML='<div class="doc-title"><strong>COLEGIO TALLER DE MARÍA</strong><span>ACTA DE REUNIÓN INSTITUCIONAL</span></div><p>Complete los campos y pulse «Actualizar vista previa».</p>'}}
+</script>
+</body>
+</html>
